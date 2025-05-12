@@ -1,7 +1,7 @@
 import java.util.*;
 
 class Solution {
-    static float max = Float.MIN_VALUE;
+    static int max = Integer.MIN_VALUE;
     static int[][] dice;
     static List<Integer> maxArr;
     static int n;
@@ -36,76 +36,63 @@ class Solution {
     }
 
     public static void update(List<Integer> curr) {
-        int[] dpA = new int[maxSum + 1];
+        int[] dpA = new int[maxSum + 1]; // A 경우의 수
+        int[] dpB = new int[maxSum + 1]; // B 경우의 수
         dpA[0] = 1;
-
-        boolean[] selectedByA = new boolean[n];
-        for (int diceIdx : curr) {
-            selectedByA[diceIdx] = true;
-        }
+        dpB[0] = 1;
 
         for (int diceIdx : curr) {
-            int[] newDpA = new int[maxSum + 1];
-            for (int sum = 0; sum <= maxSum; sum++) {
-                if (dpA[sum] > 0) {
-                    for (int face = 0; face < 6; face++) {
-                        int newSum = sum + dice[diceIdx][face];
-                        if (newSum <= maxSum) {
-                            newDpA[newSum] += dpA[sum];
+            int[] tmp = new int[maxSum + 1];
+
+            for (int i = maxSum; i >= 0; i--) {
+                if (dpA[i] > 0) {
+                    for (int j = 0; j < 6; j++) {
+                        if (i + dice[diceIdx][j] <= maxSum) {
+                            tmp[i + dice[diceIdx][j]] += dpA[i];
                         }
                     }
                 }
             }
-            dpA = newDpA;
+            dpA = tmp;
         }
 
-        int[] dpB = new int[maxSum + 1];
-        dpB[0] = 1; // 초기값
+        List<Integer> currB = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (!curr.contains(i)) {
+                currB.add(i);
+            }
+        }
 
-        for (int diceIdx = 0; diceIdx < n; diceIdx++) {
-            if (!selectedByA[diceIdx]) {
-                int[] newDpB = new int[maxSum + 1];
-                for (int sum = 0; sum <= maxSum; sum++) {
-                    if (dpB[sum] > 0) {
-                        for (int face = 0; face < 6; face++) {
-                            int newSum = sum + dice[diceIdx][face];
-                            if (newSum <= maxSum) {
-                                newDpB[newSum] += dpB[sum];
-                            }
+        for (int diceIdx : currB) {
+            int[] tmp = new int[maxSum + 1];
+
+            for (int i = maxSum; i >= 0; i--) {
+                if (dpB[i] > 0) {
+                    for (int j = 0; j < 6; j++) {
+                        if (i + dice[diceIdx][j] <= maxSum) {
+                            tmp[i + dice[diceIdx][j]] += dpB[i];
                         }
                     }
                 }
-                dpB = newDpB;
             }
+
+            dpB = tmp;
+        }
+
+        int[] countSum = new int[maxSum + 1];
+        int sum = 0;
+        for (int i = 1; i <= maxSum; i++) {
+            countSum[i] = sum;
+            sum += dpB[i];
         }
 
         int wins = 0;
-        int ties = 0;
-        int loses = 0;
-
-        for (int aSum = 1; aSum <= maxSum; aSum++) {
-            if (dpA[aSum] > 0) {
-                for (int bSum = 1; bSum <= maxSum; bSum++) {
-                    if (dpB[bSum] > 0) {
-                        int count = dpA[aSum] * dpB[bSum];
-                        if (aSum > bSum) {
-                            wins += count;
-                        } else if (aSum == bSum) {
-                            ties += count;
-                        } else {
-                            loses += count;
-                        }
-                    }
-                }
-            }
+        for (int i = 1; i <= maxSum; i++) {
+            wins += dpA[i] * countSum[i];
         }
 
-        int totalCases = wins + ties + loses;
-
-        float winRate = (float) wins / totalCases;
-
-        if (winRate > max) {
-            max = winRate;
+        if (wins > max) {
+            max = wins;
             maxArr = new ArrayList<>(curr);
         }
     }
