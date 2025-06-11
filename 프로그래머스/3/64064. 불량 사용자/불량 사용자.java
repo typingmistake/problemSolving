@@ -55,27 +55,29 @@ class Solution {
             trie.insert(id);
         }
 
-        List<List<String>> matchs = new ArrayList<>();
+        List<List<String>> list = new ArrayList<>(); // 각 banned_id에 대해 가능한 user_id 목록
         for (String bannedId : banned_id) {
             List<String> matches = trie.search(bannedId);
-            matchs.add(matches);
+            list.add(matches);
         }
 
-        backtrack(matchs, 0, new HashSet<>());
+        resultSet.clear();
+        backtrack(list, 0, new HashSet<>());
 
         return resultSet.size();
     }
 
-    private void backtrack(List<List<String>> matchs, int index, Set<String> used) {
-        if (index == matchs.size()) {
-            resultSet.add(new HashSet<>(used));
+    private void backtrack(List<List<String>> list, int index, Set<String> used) {
+        if (index == list.size()) {
+            // resultSet.add(used); // 문제 : used 객체가 변경될 수 있으므로, 새로운 Set을 추가해야 함
+            resultSet.add(new HashSet<>(used)); // 새로운 Set을 추가하여 변경 가능성 해결
             return;
         }
 
-        for (String candidate : matchs.get(index)) {
+        for (String candidate : list.get(index)) {
             if (!used.contains(candidate)) {
                 used.add(candidate);
-                backtrack(matchs, index + 1, used);
+                backtrack(list, index + 1, used);
                 used.remove(candidate);
             }
         }
