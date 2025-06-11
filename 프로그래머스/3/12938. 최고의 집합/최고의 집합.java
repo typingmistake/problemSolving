@@ -3,6 +3,7 @@ class Solution {
         int[] answer = new int[n];
         int m = s/n;
         int p = s%n;
+        
         if(m == 0)
             return new int[]{-1};
         
@@ -13,6 +14,7 @@ class Solution {
             }
             answer[i] = m;
         }
+        
         return answer;
     }
 }
