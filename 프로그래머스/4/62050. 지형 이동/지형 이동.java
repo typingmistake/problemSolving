@@ -2,14 +2,13 @@ import java.util.*;
 
 class Solution {
     class Block {
-        int x, y, h;
+        int x, y;
         Block parent;
 
         Block(int x, int y, int h) {
             this.parent = this;
             this.x = x;
             this.y = y;
-            this.h = h;
         }
     }
 
@@ -72,7 +71,7 @@ class Solution {
         int cnt = roots.size();
 
         // 최소 비용으로 연결 (MST)
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[2] - b[2]);
         pq.addAll(costMap.values());
 
         while (!pq.isEmpty() && cnt > 1) {
