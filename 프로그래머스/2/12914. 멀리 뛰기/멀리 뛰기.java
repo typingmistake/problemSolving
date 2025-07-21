@@ -1,7 +1,6 @@
 class Solution {
     int MOD = 1234567;
     public long solution(int n) {
-        long answer = 0;
         int[] dp = new int[n+1];
         dp[0] = 1;
         
