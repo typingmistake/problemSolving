@@ -12,7 +12,6 @@ class Solution {
                     dp[next] = (dp[next] + dp[i])%MOD;
             }
         }
-        
         return dp[n];
     }
 }
