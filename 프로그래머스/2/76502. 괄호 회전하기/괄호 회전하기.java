@@ -24,13 +24,15 @@ class Solution {
         for (char c : s.toCharArray()) {
             if (c == '(' || c == '{' || c == '[') {
                 stack.push(c);
-            } else {
-                if (stack.isEmpty())
-                    return false;
-                char last = stack.pop();
-                if (map.get(last) != c) {
-                    return false;
-                }
+                continue;
+            }
+
+            if (stack.isEmpty())
+                return false;
+
+            char last = stack.pop();
+            if (map.get(last) != c) {
+                return false;
             }
         }
         if (!stack.isEmpty())
