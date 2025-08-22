@@ -1,10 +1,21 @@
+import java.util.*;
+
 class Solution {
     int solution(int[][] land) {
-        int answer = 0;
+        int size = 4;
+        
+        for(int i = 1; i < land.length; i++){
+            for(int j = 0; j < size; j++){
+                int max = 0;
+                for(int k = 0; k < size; k++){
+                    if(j==k) continue;
+                    max = Math.max(max, land[i-1][k]);
+                }
+                land[i][j] += max;
+            }
+        }
+        
 
-        // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
-        System.out.println("Hello Java");
-
-        return answer;
+        return Arrays.stream(land[land.length-1]).max().orElse(0);
     }
 }
