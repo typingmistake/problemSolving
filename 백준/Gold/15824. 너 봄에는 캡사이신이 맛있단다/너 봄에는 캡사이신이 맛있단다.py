@@ -10,6 +10,6 @@ dp = [0]*N
 
 for i in range(1,N): # 각 자리에서 끝나는 경우
     # 경우의 수 추가, 값 추가(등비수열의 합)
-    dp[i] = (2*dp[i-1] + (nums[i]-nums[i-1])*(2**i - 1)) % MOD
+    dp[i] = (2*dp[i-1] + (nums[i]-nums[i-1])*(pow(2, i, MOD) - 1)) % MOD
 
 print(sum(dp)%MOD)
