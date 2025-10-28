@@ -13,7 +13,7 @@ public class Main {
                 .toArray();
 
         int cur = 0; // 현재 속력, 1만큼만 높일 수 있고, 낮추기는 제한 없음
-        int answer = 0;
+        long answer = 0;
         for (int i = N-1; i >= 0; i--){
             if(arr[i] > cur){
                 cur++; // 높이기
