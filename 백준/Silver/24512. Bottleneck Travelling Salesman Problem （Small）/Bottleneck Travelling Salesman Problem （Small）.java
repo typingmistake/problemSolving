@@ -26,11 +26,10 @@ public class Main {
             graph[u][v] = c;
         }
 
-        for(int start = 1; start <= N; start++){
-            List<Integer> initialPath = new ArrayList<>();
-            initialPath.add(start);
-            solve(1 << start, start, start, 0, initialPath);
-        }
+        List<Integer> initialPath = new ArrayList<>();
+        initialPath.add(1);
+        solve(1 << 1, 1, 1, 0, initialPath);
+
 
         if(result == Integer.MAX_VALUE){
             System.out.println(-1);
@@ -44,12 +43,13 @@ public class Main {
         }
     }
 
-    static void solve(int visited, int start, int curr, int maxCost, List<Integer> path){
+    static void solve(int visited, int start, int curr, int cost, List<Integer> path){
         if(Integer.bitCount(visited) == N){
+            // 시작점으로 돌아갈 수 있는지 확인
             if(graph[curr][start] > 0){
-                int finalMaxCost = Math.max(maxCost, graph[curr][start]);
-                if(finalMaxCost < result){
-                    result = finalMaxCost;
+                cost = Math.max(cost, graph[curr][start]);
+                if(cost < result){
+                    result = cost;
                     resultPath = new ArrayList<>(path);
                 }
             }
@@ -60,9 +60,9 @@ public class Main {
             if((visited & (1 << i)) != 0 || graph[curr][i] == 0) continue;
 
             int nextVisited = visited | (1 << i);
-            int nextMaxCost = Math.max(maxCost, graph[curr][i]);
+            int nextCost = Math.max(cost, graph[curr][i]);
             path.add(i);
-            solve(nextVisited, start, i, nextMaxCost, path);
+            solve(nextVisited, start, i, nextCost, path);
             path.remove(path.size() - 1);
         }
     }
