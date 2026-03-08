@@ -19,13 +19,15 @@ public class Main {
             sets[i] = new HashSet<>();
             sets[i].add(i+1); // 자기 자신
         }
-
+        
+        // 최대 N-1개의 연결
         for(int i = 0; i < N-1; i++){
             int[] newArr = new int[N];
 
             for(int j = 0; j < N; j++){
-                sets[j].addAll(sets[arr[j]-1]);
-                newArr[j] = arr[arr[j]-1];
+                int idx = arr[j]-1; // 이어져있는 인덱스
+                sets[j].addAll(sets[idx]); // 집합 추가
+                newArr[j] = arr[idx]; // 갱신
             }
 
             arr = newArr;
